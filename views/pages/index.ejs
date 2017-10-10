@@ -1,0 +1,49 @@
+<!-- views/pages/index.ejs -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>I'm Hungry</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+
+
+</head>
+
+<body>
+
+    <div class='ui center aligned grid'>
+        <div class='column four wide'>
+            <form class='ui form'>
+                <h2 class='ui dividing header'>Whatchu want?</h2>
+                <div class='field'>
+                    <label>Zip Code</label>
+                    <input type='text' pattern='[0-9]{5}' placeholder='12345'>
+                </div>
+                <div class='field'>
+                    <label>Keyword</label>
+                    <input type='text' placeholder='ex. Peach Cobbler'>
+                </div>
+                <div class='fields'>
+                    <div class='field'>
+                        <div class='ui toggle checkbox'>
+                            <input type='checkbox'>
+                            <label>Delivery</label>
+                        </div>
+                    </div>
+                    <div class='field'>
+                        <div class='ui toggle checkbox'>
+                            <input type='checkbox'>
+                            <label>Pickup</label>
+                        </div>
+                    </div>
+                </div>
+                <button class='ui button' type='submit'>Submit</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>
