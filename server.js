@@ -1,5 +1,16 @@
 var express = require('express');
+var mysql = require('mysql');
 var app = express();
+
+var connection = mysql.createConnection({
+    host: 'localhost',
+    user:   'root',
+    password:   'YourLocalSQLPwHere',
+    database: 'FoodAppTest'
+})
+
+connection.connect();
+
 
 const PORT = 3000;
 
