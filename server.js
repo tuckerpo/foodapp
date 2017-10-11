@@ -2,14 +2,16 @@ var express = require('express');
 var mysql = require('mysql');
 var app = express();
 
-var connection = mysql.createConnection({
-    host: 'localhost',
-    user:   'root',
-    password:   'YourLocalSQLPwHere',
-    database: 'FoodAppTest'
-})
+// var connection = mysql.createConnection({
+//     host: process.env.host,
+//     user:   process.env.user,
+//     password:   process.env.password,
+//     database: process.env.database
+// })
 
-connection.connect();
+connection.connect(function(error) {
+    if (!!error) { console.log('db not connected'); } else { console.log('db connected'); }
+});
 
 
 const PORT = 3000;
