@@ -9,12 +9,12 @@ var app = express();
 //     database: process.env.database
 // })
 
-connection.connect(function(error) {
-    if (!!error) { console.log('db not connected'); } else { console.log('db connected'); }
-});
+//connection.connect(function(error) {
+//    if (!!error) { console.log('db not connected'); } else { console.log('db connected'); }
+//});
 
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 
