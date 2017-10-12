@@ -14,6 +14,64 @@ app.listen(PORT, function() {
     console.log('Server running on port: ' + PORT);
 });
 
+
+
+// -----------DB Setup
+// var connection = mysql.createConnection({
+//     host: process.env.host,
+//     user:   process.env.user,
+//     password:   process.env.password,
+//     database: process.env.database
+// })
+
+//connection.connect(function(error) {
+//    if (!!error) { console.log('db not connected'); } else { console.log('db connected'); }
+//});
+
+// -----------Yelp-Fusion API Setup
+var client;
+var token = cache.get('token') || yelp.accessToken(process.env.YELPID, process.env.YELPSECRET)
+.then(res => {
+    cache.put('token', res.jsonBody.access_token);
+}).catch(e => {
+    console.log(e);
+}).then(res => {
+    client = yelp.client(cache.get('token'));
+}).catch(e => {
+    console.log(e);
+})
+
+// -----------Routes
+app.get('/', (req, res) => {
+    res.render('pages/index.ejs');
+
+/*
+// Example API Call, uncomment to see results
+    client.search({
+        term:'japanese',
+        categories: 'food,restaurants',
+        location: '14215',
+        price: '1'
+    }).then(res => {
+        console.log(res.jsonBody);
+        var businesses = res.jsonBody.businesses;
+        for(var i = 0; i < businesses.length; i++) {
+            console.log(businesses[i].name);
+        }
+    }).catch(e => {
+        console.log(e);
+    });
+*/
+});
+
+app.get('/results', (req, res) => {
+
+    res.render('pages/results.ejs', {
+        resultList: dummy
+    });
+});
+
+
 const dummy = [ { id: '99-fast-food-buffalo',
     name: '99 Fast Food',
     image_url: 'https://s3-media3.fl.yelpcdn.com/bphoto/vwOnr_5hC_sZiKZ6grJMeA/o.jpg',
@@ -179,58 +237,3 @@ const dummy = [ { id: '99-fast-food-buffalo',
     phone: '+17168336668',
     display_phone: '(716) 833-6668',
     distance: 11166.185841704095 } ];
-
-// -----------DB Setup
-// var connection = mysql.createConnection({
-//     host: process.env.host,
-//     user:   process.env.user,
-//     password:   process.env.password,
-//     database: process.env.database
-// })
-
-//connection.connect(function(error) {
-//    if (!!error) { console.log('db not connected'); } else { console.log('db connected'); }
-//});
-
-// -----------Yelp-Fusion API Setup
-var client;
-var token = cache.get('token') || yelp.accessToken(process.env.YELPID, process.env.YELPSECRET)
-.then(res => {
-    cache.put('token', res.jsonBody.access_token);
-}).catch(e => {
-    console.log(e);
-}).then(res => {
-    client = yelp.client(cache.get('token'));
-}).catch(e => {
-    console.log(e);
-})
-
-// -----------Routes
-app.get('/', (req, res) => {
-    res.render('pages/index.ejs');
-
-/*
-// Example API Call, uncomment to see results
-    client.search({
-        term:'japanese',
-        categories: 'food,restaurants',
-        location: '14215',
-        price: '1'
-    }).then(res => {
-        console.log(res.jsonBody);
-        var businesses = res.jsonBody.businesses;
-        for(var i = 0; i < businesses.length; i++) {
-            console.log(businesses[i].name);
-        }
-    }).catch(e => {
-        console.log(e);
-    });
-*/
-});
-
-app.get('/results', (req, res) => {
-
-    res.render('pages/results.ejs', {
-        resultList: dummy
-    });
-});
