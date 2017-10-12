@@ -11,19 +11,30 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
-    <script src="js/accordion.js"></script>
 
     <script language='javascript'>
-        $(document).ready(function () {
-            $('.ui.accordion').accordion();
-        });
+
     </script>
 
 </head>
 <body>
+
     <% resultList.forEach( item => { %>
-        <%- include('../partials/resultItem', { name: item.name }); %>
+        <%- include('../partials/resultItem', {
+            item: item
+        }); %>
+        <br>
     <% }) %>
 
 </body>
 </html>
+
+<script type='text/javascript'>
+$(document).ready(function() {
+    $('.event').click(function() {
+        alert('c');
+    });
+});
+
+//var rl = JSON.parse('<%- resultList %>');
+</script>

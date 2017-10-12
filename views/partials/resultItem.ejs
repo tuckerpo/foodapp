@@ -1,4 +1,7 @@
 <!-- views/partials/resultItem.ejs -->
-<div>
-    <h2><%= name %></h2>
+<div class=resultItem data=<%= item %>>
+        <%= item.name %><br>
+        Rating: <%= item.rating %>
+        Price: <%= item.price %>
+        <div class=event>View Events</div>
 </div>
