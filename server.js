@@ -14,18 +14,22 @@ app.listen(PORT, function() {
     console.log('Server running on port: ' + PORT);
 });
 
-// -----------DB Setup
-// var connection = mysql.createConnection({
-//     host: process.env.host,
-//     user:   process.env.user,
-//     password:   process.env.password,
-//     database: process.env.database
-// })
-
-//connection.connect(function(error) {
-//    if (!!error) { console.log('db not connected'); } else { console.log('db connected'); }
-//});
-
+// ----------------- DB Setup
+var connection = mysql.createConnection({
+    host     : process.env.RDS_HOSTNAME,
+    user     : process.env.RDS_USERNAME,
+    password : process.env.RDS_PASSWORD,
+    port     : process.env.RDS_PORT
+  });
+  
+  connection.connect(function(err) {
+    if (!!err) {
+      console.error('Database connection failed: ' + err.stack);
+      return;
+    }
+  
+    console.log('Connected to database.');
+  });
 // -----------Yelp-Fusion API Setup
 var client;
 var token = cache.get('token') || yelp.accessToken(process.env.YELPID, process.env.YELPSECRET)
