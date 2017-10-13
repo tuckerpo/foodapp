@@ -21,19 +21,15 @@
     <% include ../partials/headerBar.ejs %>
 </header>
 <body>
+    <div>
+        <%= result.name %>
+        <a href=<%= result.url %> >Yelp</a>
 
-    <% resultList.forEach( item => { %>
-        <%- include('../partials/resultItem', {
-            item: item
-        }); %>
-        <br>
-    <% }) %>
+    </div>
 
 </body>
 </html>
 
 <script type='text/javascript'>
-$(document).ready(function() {
 
-});
 </script>

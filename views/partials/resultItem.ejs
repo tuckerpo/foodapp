@@ -1,7 +1,10 @@
 <!-- views/partials/resultItem.ejs -->
-<div class=resultItem data=<%= item %>>
+<div class=resultItem
+    data-id=<%= item.id %>
+    data-name=<%= item.name %> >
         <%= item.name %><br>
+        <img src=<%= item.image_url %> height="40" width="40">
         Rating: <%= item.rating %>
         Price: <%= item.price %>
-        <div class=event>View Events</div>
+        <a href='/events/<%= item.id %>' >View Events</a>
 </div>
