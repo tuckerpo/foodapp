@@ -4,6 +4,7 @@ var express = require('express');
 var mysql = require('mysql');
 var yelp = require('yelp-fusion');
 var cache = require('memory-cache');
+var bodyParser = require('body-parser')
 require('dotenv').config();
 var app = express();
 app.set('view engine', 'ejs');
@@ -108,3 +109,17 @@ app.get('/events/:id', (req, res) => {
         console.log(e);
     });
 });
+
+
+app.use(bodyParser.urlencoded({
+    extended: true
+})); 
+
+app.get('/login', (req, res) => {
+    res.render('pages/login.ejs');
+});
+
+app.get('/register', (req, res) => {
+    res.render('pages/register.ejs');
+});
+
