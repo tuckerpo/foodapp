@@ -11,18 +11,14 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script> 
-    <script src="js/accordion.js"></script>   
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+    <script src="js/accordion.js"></script>
 
     <script language='javascript'>
         $(document).ready(function () {
             $('.ui.accordion').accordion();
         });
     </script>
-
-
-
-
 
 </head>
 
@@ -32,15 +28,15 @@
 </header>
     <div class='ui center aligned grid'>
         <div class='column four wide'>
-            <form class='ui form'>
+            <form class='ui form' action='/results' method='get'>
                 <h2 class='ui dividing header'>Whatchu want?</h2>
                 <div class='field'>
                     <label>Zip Code</label>
-                    <input type='text' pattern='[0-9]{5}' placeholder='12345'>
+                    <input type='text' pattern='[0-9]{5}' placeholder='12345' name='zip_code'>
                 </div>
                 <div class='field'>
                     <label>Keyword</label>
-                    <input type='text' placeholder='ex. Peach Cobbler'>
+                    <input type='text' placeholder='ex. Peach Cobbler' name='keyword'>
                 </div>
                 <div class="field">
                     <label>Allergies</label>
@@ -67,7 +63,7 @@
                     What is "I'm Hungry"?
                 </div>
                 <div class="active content">
-                    <p>"I'm Hungry" gives you suggestions on where to eat based on your input. 
+                    <p>"I'm Hungry" gives you suggestions on where to eat based on your input.
                         Let us know what you're in the mood for, we'll do the rest.
                     </p>
                 </div>
@@ -76,7 +72,7 @@
                     How Does It Work?
                 </div>
                 <div class="content">
-                    <p>We take your input and bounce it off a few different search engines, returning just want you 
+                    <p>We take your input and bounce it off a few different search engines, returning just want you
                         want to see, saving you the trouble of having to sift through search results yourself.
                     </p>
                 </div>
