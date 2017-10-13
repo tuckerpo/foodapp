@@ -30,6 +30,34 @@ connection.connect(function(err) {
     console.log('Connected to database.');
 });
 
+connection.query("CREATE DATABASE IF NOT EXISTS foodapp", function (err, result, fields) {
+    if (err) { console.log(err.stack); }
+    console.log(result);
+});
+
+connection.query("CREATE TABLE IF NOT EXISTS foodapp.account(id INT NOT NULL AUTO_INCREMENT,\
+    accountName VARCHAR(255), email VARCHAR(255), PRIMARY KEY (id)) ENGINE=InnoDB", function (err, result, fields) {
+        if (err) { console.log(err.stack); }
+        console.log(result);
+    });
+
+connection.query("CREATE TABLE IF NOT EXISTS foodapp.event(event_id INT NOT NULL AUTO_INCREMENT,\
+    location VARCHAR(255), event_time DATETIME, PRIMARY KEY (event_id)) ENGINE=InnoDB", function (err, result, fields) {
+        if (err) { console.log(err.stack); }
+        console.log(result);
+    });
+
+connection.query("CREATE TABLE IF NOT EXISTS foodapp.eventAttend\
+    (id INT NOT NULL AUTO_INCREMENT,\
+    user_id INT NOT NULL,\
+    event_id INT NOT NULL,\
+    PRIMARY KEY(id),\
+    FOREIGN KEY(user_id) REFERENCES foodapp.account(id),\
+    FOREIGN KEY(event_id) REFERENCES foodapp.event(event_id))", function(err,result,fields) {
+        if (err) { console.log(err.stack); }
+        console.log(result);
+    });
+
 // -----------Yelp-Fusion API Setup
 var client;
 var token = cache.get('token') || yelp.accessToken(process.env.YELPID, process.env.YELPSECRET)
