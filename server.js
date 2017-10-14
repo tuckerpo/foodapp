@@ -20,7 +20,8 @@ var connection = mysql.createConnection({
     host     : process.env.RDS_HOSTNAME,
     user     : process.env.RDS_USERNAME,
     password : process.env.RDS_PASSWORD,
-    port     : process.env.RDS_PORT
+    port     : process.env.RDS_PORT,
+    database : process.env.RDS_DATABASE
 });
 
 connection.connect(function(err) {
@@ -30,34 +31,6 @@ connection.connect(function(err) {
     }
     console.log('Connected to database.');
 });
-
-connection.query("CREATE DATABASE IF NOT EXISTS foodapp", function (err, result, fields) {
-    if (err) { console.log(err.stack); }
-    console.log(result);
-});
-
-connection.query("CREATE TABLE IF NOT EXISTS foodapp.account(id INT NOT NULL AUTO_INCREMENT,\
-    accountName VARCHAR(255), email VARCHAR(255), PRIMARY KEY (id)) ENGINE=InnoDB", function (err, result, fields) {
-        if (err) { console.log(err.stack); }
-        console.log(result);
-    });
-
-connection.query("CREATE TABLE IF NOT EXISTS foodapp.event(event_id INT NOT NULL AUTO_INCREMENT,\
-    location VARCHAR(255), event_time DATETIME, PRIMARY KEY (event_id)) ENGINE=InnoDB", function (err, result, fields) {
-        if (err) { console.log(err.stack); }
-        console.log(result);
-    });
-
-connection.query("CREATE TABLE IF NOT EXISTS foodapp.eventAttend\
-    (id INT NOT NULL AUTO_INCREMENT,\
-    user_id INT NOT NULL,\
-    event_id INT NOT NULL,\
-    PRIMARY KEY(id),\
-    FOREIGN KEY(user_id) REFERENCES foodapp.account(id),\
-    FOREIGN KEY(event_id) REFERENCES foodapp.event(event_id))", function(err,result,fields) {
-        if (err) { console.log(err.stack); }
-        console.log(result);
-    });
 
 // -----------Yelp-Fusion API Setup
 var client;
@@ -96,24 +69,60 @@ app.get('/results', (req, res) => {
 // Individual Restaurants Page
 // Lists all events at restaurant
 app.get('/events/:id', (req, res) => {
-
-    //TODO: make SQL query here using req.params.id
-    // to get list of events
-
-    client.business(req.params.id).then(response => {
-        //console.log(response.jsonBody);
-        res.render('pages/events.ejs', {
-            result : response.jsonBody
+    var eventList;
+    var attendees = [];
+    var query = 'SELECT * FROM foodapp.event '+
+                'WHERE location=? ' +
+                'ORDER BY event_time DESC';
+    connection.query(query, [req.params.id], function(error, results) {
+        if(error) {
+            console.log(error);
+            return;
+        }
+        eventList = results;
+        var eventListIDs = [];
+        for(var i = 0; i < eventList.length; i++) {
+            eventListIDs.push(eventList[i].event_id);
+        }
+        query = 'SELECT accountName, eventAttend.event_id '+
+                'FROM account '+
+                'JOIN eventAttend ON eventAttend.user_id = account.id '+
+                'WHERE event_id IN (?)';
+        connection.query(query, [eventListIDs], function(error, results) {
+            if(error) {
+                console.log(error);
+                return;
+            }
+            var t = JSON.parse(JSON.stringify(results));
+            for(var i = 0; i < eventList.length; i++) {
+                console.log(t);
+                var temp = t.filter(function(at) {
+                    at.event_id == eventList[i].event_id
+                });
+                // console.log(temp);
+                attendees.push.apply(temp);
+            }
+            console.log(attendees);
+            client.business(req.params.id).then(response => {
+                //console.log(response.jsonBody);
+                //console.log(eventList);
+                // console.log(attendees);
+                res.render('pages/events.ejs', {
+                    result : response.jsonBody,
+                    eventList : eventList,
+                    attendees : attendees
+                });
+            }).catch(e => {
+                console.log(e);
+            });
         });
-    }).catch(e => {
-        console.log(e);
     });
 });
 
 
 app.use(bodyParser.urlencoded({
     extended: true
-})); 
+}));
 
 app.get('/login', (req, res) => {
     res.render('pages/login.ejs');
@@ -122,4 +131,3 @@ app.get('/login', (req, res) => {
 app.get('/register', (req, res) => {
     res.render('pages/register.ejs');
 });
-

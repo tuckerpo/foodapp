@@ -22,8 +22,15 @@
 </header>
 <body>
     <div>
+
         <%= result.name %>
         <a href=<%= result.url %> >Yelp</a>
+
+        <% eventList.forEach( event => { %>
+            <%- include('../partials/event', {
+                event: event
+            }); %>
+        <% }) %>
 
     </div>
 
