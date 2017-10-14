@@ -11,32 +11,53 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
-
-    <script language='javascript'>
-
-    </script>
-
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.css" />
 </head>
 <header>
     <% include ../partials/headerBar.ejs %>
 </header>
 <body>
-    <div>
-
-        <%= result.name %>
-        <a href=<%= result.url %> >Yelp</a>
-
-        <% eventList.forEach( event => { %>
+    <%= result.name %>
+    <a href=<%= result.url %> >Yelp</a>
+    <button class=addEvent>Add Event</button>
+    <form class='ui form' action='/addEvent' method='post' id=calendarForm>
+        <div class='ui calendar'>
+            <div class='ui input left icon'>
+                <i class='calendar icon'></i>
+                <input type='text' name='date' placeholder='Date/Time'>
+            </div>
+        </div>
+        <button class='ui button' type=submit required>Submit</button>
+    </form>
+    <ul class=eventList>
+        <% for(var i = 0; i < eventList.length; i++) { %>
+            <li>
             <%- include('../partials/event', {
-                event: event
+                event: eventList[i],
+                attendees: attendees[i]
             }); %>
-        <% }) %>
-
-    </div>
+            </li>
+        <% } %>
+    </ul>
 
 </body>
 </html>
 
 <script type='text/javascript'>
-
+$(document).ready(function() {
+    $('.ui.calendar').calendar();
+    $('#calendarForm').hide();
+    // Event handler to add user to event
+    $('.attend').click(function() {
+        // #TODO query DB
+        // if not attending
+        // insert into db
+        // and append name to list
+    });
+    // Event handler to add new event
+    $('.addEvent').click(function() {
+        $('#calendarForm').toggle();
+    });
+});
 </script>

@@ -93,20 +93,13 @@ app.get('/events/:id', (req, res) => {
                 console.log(error);
                 return;
             }
-            var t = JSON.parse(JSON.stringify(results));
             for(var i = 0; i < eventList.length; i++) {
-                console.log(t);
-                var temp = t.filter(function(at) {
-                    at.event_id == eventList[i].event_id
+                var temp = results.filter(function(at) {
+                    return at.event_id == eventList[i].event_id;
                 });
-                // console.log(temp);
-                attendees.push.apply(temp);
+                attendees.push(temp);
             }
-            console.log(attendees);
             client.business(req.params.id).then(response => {
-                //console.log(response.jsonBody);
-                //console.log(eventList);
-                // console.log(attendees);
                 res.render('pages/events.ejs', {
                     result : response.jsonBody,
                     eventList : eventList,
@@ -117,6 +110,14 @@ app.get('/events/:id', (req, res) => {
             });
         });
     });
+});
+
+app.post('/addEvent', (req, res) => {
+    console.log(req.query);
+    var date = req.body;
+    console.log(date);
+    var prevURL = req.header('Referer') || '/';
+    //res.redirect(prevURL);
 });
 
 
