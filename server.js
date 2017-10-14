@@ -4,11 +4,15 @@ var express = require('express');
 var mysql = require('mysql');
 var yelp = require('yelp-fusion');
 var cache = require('memory-cache');
+var expressValidator = require('express-validator');
 var bodyParser = require('body-parser')
+var bcrypt = require('bcryptjs');
+var session = require('express-session')
 require('dotenv').config();
 var app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(expressValidator());
 
 const PORT = process.env.PORT || 3000;
 
@@ -120,15 +124,44 @@ app.get('/register', (req, res) => {
     res.render('pages/register.ejs');
 })
 
+
+// get registration input
 app.post('/register', (req, res) => {
+
     var username = req.body.username;
     var password = req.body.pw;
     var email = req.body.email;
     var pw2 = req.body.pw2;
-    console.log(email);
-});
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync(req.body.pw, salt);
+    console.log('hashed and salted ' + hash);
 
-// dont let anyone sniff your packets
+    // make sure fields aren't filled with bullshit
+    req.checkBody('username', 'Username is required').notEmpty();
+    req.checkBody('email', 'Valid email required').isEmail();
+    req.checkBody('pw', 'Password is required').notEmpty();
+    req.checkBody('pw2', 'Passwords don\'t match!').equals(req.body.pw);
+    var err = req.validationErrors()
+    if (err) {
+        console.log('input errors');
+        res.render('pages/register.ejs');
+    } else {
+        console.log('no errors');
+        // if there were no input errors, register them in the DB
+        // or check if they already are
+        // if succesfully registered, send splash success page, route back to home
+        // if already in, route back to homepage
+        connection.query("INSERT IGNORE INTO foodapp.account (accountName, email, password) VALUES (?,?,?)", [username, email, hash]), function (err, result, fields) {
+            if (err) { console.log(err.stack); }
+            else {
+                console.log(result);
+            }
+        }
+    }
+    
+});
+       
+// dont let anyone sniff your packets   
 
 // use bcrypt for hash
 
