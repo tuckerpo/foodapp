@@ -25,7 +25,8 @@
     "yelp-fusion": "^1.0.3",
     "body-parser": "*",
     "bcryptjs": "*",
-    "express-validator": "*"
+    "express-validator": "*",
+    "express-session": "*"
   },
   "engines": {
     "node": "8.6.0",

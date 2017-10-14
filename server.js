@@ -7,6 +7,7 @@ var cache = require('memory-cache');
 var expressValidator = require('express-validator');
 var bodyParser = require('body-parser')
 var bcrypt = require('bcryptjs');
+var session = require('express-session')
 require('dotenv').config();
 var app = express();
 app.set('view engine', 'ejs');
@@ -150,15 +151,11 @@ app.post('/register', (req, res) => {
         // or check if they already are
         // if succesfully registered, send splash success page, route back to home
         // if already in, route back to homepage
-        console.log('username: ' + username);
-        console.log('email: ' + email);
-        console.log('hash: ' + hash);
-        connection.query("INSERT INTO foodapp.account (accountName, email, password) VALUES (?,?,?)", [username, email, hash]), function (err, result, fields) {
+        connection.query("INSERT IGNORE INTO foodapp.account (accountName, email, password) VALUES (?,?,?)", [username, email, hash]), function (err, result, fields) {
             if (err) { console.log(err.stack); }
             else {
                 console.log(result);
             }
-            //res.render('pages/index.ejs');
         }
     }
     
