@@ -8,22 +8,23 @@ var bodyParser = require('body-parser')
 require('dotenv').config();
 var app = express();
 app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, function() {
+app.listen(PORT, function () {
     console.log('Server running on port: ' + PORT);
 });
 
 // ----------------- DB Setup
 var connection = mysql.createConnection({
-    host     : process.env.RDS_HOSTNAME,
-    user     : process.env.RDS_USERNAME,
-    password : process.env.RDS_PASSWORD,
-    port     : process.env.RDS_PORT
+    host: process.env.RDS_HOSTNAME,
+    user: process.env.RDS_USERNAME,
+    password: process.env.RDS_PASSWORD,
+    port: process.env.RDS_PORT
 });
 
-connection.connect(function(err) {
+connection.connect(function (err) {
     if (!!err) {
         console.error('Database connection failed: ' + err.stack);
         return;
@@ -54,7 +55,7 @@ connection.query("CREATE TABLE IF NOT EXISTS foodapp.eventAttend\
     event_id INT NOT NULL,\
     PRIMARY KEY(id),\
     FOREIGN KEY(user_id) REFERENCES foodapp.account(id),\
-    FOREIGN KEY(event_id) REFERENCES foodapp.event(event_id))", function(err,result,fields) {
+    FOREIGN KEY(event_id) REFERENCES foodapp.event(event_id))", function (err, result, fields) {
         if (err) { console.log(err.stack); }
         console.log(result);
     });
@@ -62,15 +63,15 @@ connection.query("CREATE TABLE IF NOT EXISTS foodapp.eventAttend\
 // -----------Yelp-Fusion API Setup
 var client;
 var token = cache.get('token') || yelp.accessToken(process.env.YELPID, process.env.YELPSECRET)
-.then(res => {
-    cache.put('token', res.jsonBody.access_token);
-}).catch(e => {
-    console.log(e);
-}).then(res => {
-    client = yelp.client(cache.get('token'));
-}).catch(e => {
-    console.log(e);
-})
+    .then(res => {
+        cache.put('token', res.jsonBody.access_token);
+    }).catch(e => {
+        console.log(e);
+    }).then(res => {
+        client = yelp.client(cache.get('token'));
+    }).catch(e => {
+        console.log(e);
+    })
 
 // -----------Routes
 // Search Page
@@ -103,7 +104,7 @@ app.get('/events/:id', (req, res) => {
     client.business(req.params.id).then(response => {
         //console.log(response.jsonBody);
         res.render('pages/events.ejs', {
-            result : response.jsonBody
+            result: response.jsonBody
         });
     }).catch(e => {
         console.log(e);
@@ -111,15 +112,23 @@ app.get('/events/:id', (req, res) => {
 });
 
 
-app.use(bodyParser.urlencoded({
-    extended: true
-})); 
-
 app.get('/login', (req, res) => {
     res.render('pages/login.ejs');
 });
 
 app.get('/register', (req, res) => {
     res.render('pages/register.ejs');
+})
+
+app.post('/register', (req, res) => {
+    var username = req.body.username;
+    var password = req.body.pw;
+    var email = req.body.email;
+    var pw2 = req.body.pw2;
+    console.log(email);
 });
+
+// dont let anyone sniff your packets
+
+// use bcrypt for hash
 
