@@ -141,7 +141,7 @@ app.post('/register', (req, res) => {
     req.checkBody('pw', 'Password is required').notEmpty();
     req.checkBody('pw2', 'Passwords don\'t match!').equals(req.body.pw);
     var err = req.validationErrors()
-    if (!!err) {
+    if (err) {
         console.log('input errors');
         res.render('pages/register.ejs');
     } else {
@@ -150,18 +150,21 @@ app.post('/register', (req, res) => {
         // or check if they already are
         // if succesfully registered, send splash success page, route back to home
         // if already in, route back to homepage
-        connection.query('INSERT INTO foodapp.account\
-        (accountName, email, password) VALUES ("username", "email", "hash")', function (err, result, fields) {
-                if (err) { console.log(err.stack); }
+        console.log('username: ' + username);
+        console.log('email: ' + email);
+        console.log('hash: ' + hash);
+        connection.query("INSERT INTO foodapp.account (accountName, email, password) VALUES (?,?,?)", [username, email, hash]), function (err, result, fields) {
+            if (err) { console.log(err.stack); }
+            else {
                 console.log(result);
-                res.render('pages/index.ejs');
-            });
+            }
+            //res.render('pages/index.ejs');
+        }
     }
-
-
+    
 });
-
-// dont let anyone sniff your packets
+       
+// dont let anyone sniff your packets   
 
 // use bcrypt for hash
 
