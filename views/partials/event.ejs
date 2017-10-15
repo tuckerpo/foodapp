@@ -1,0 +1,10 @@
+<div class=event id=event<%= event.event_id %>>
+    <div class='ui small header'>Event ID: <%= event.event_id %></div>
+    <%= event.event_time %>
+    <ul class=attendees>
+    <% attendees.forEach( at => { %>
+        <li><%= at.accountName %></li>
+    <% }) %>
+    </ul>
+    <button class=attend>ATTEND</button><br>
+</div>

@@ -11,25 +11,57 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
-
-    <script language='javascript'>
-
-    </script>
-
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.css" />
 </head>
 <header>
     <% include ../partials/headerBar.ejs %>
 </header>
 <body>
-    <div>
-        <%= result.name %>
-        <a href=<%= result.url %> >Yelp</a>
+    <h3><%= result.name %></h3>
+    <button class='addEvent ui labeled icon button'>
+        <i class='add icon'></i>
+        Add Event
+    </button>
+    <a href=<%= result.url %> >Yelp</a>
+    <form class='ui form' action='/addEvent' method='post' id=calendarForm>
+        <input type="hidden" name="location" value=<%= location %> />
+        <div class='ui calendar'>
+            <div class='ui input left icon'>
+                <i class='calendar icon'></i>
+                <input id='dateInput' type='text' name='date' placeholder='Date/Time'>
+            </div>
+        </div>
+        <button class='ui button' type=submit required>Submit</button>
+    </form>
 
+    <div class='eventListaddEvent ui middle aligned selection list'>
+        <% for(var i = 0; i < eventList.length; i++) { %>
+            <div class='item'>
+            <%- include('../partials/event', {
+                event: eventList[i],
+                attendees: attendees[i]
+            }); %>
+            </div>
+        <% } %>
     </div>
-
 </body>
 </html>
 
 <script type='text/javascript'>
-
+$(document).ready(function() {
+    $('.ui.calendar').calendar();
+    $('#calendarForm').hide();
+    // Event handler to add user to event
+    $('.attend').click(function() {
+        // #TODO query DB
+        // if not attending
+        // insert into db
+        // and append name to list
+    });
+    // Event handler to add new event
+    $('.addEvent').click(function() {
+        $('#calendarForm').toggle();
+    });
+});
 </script>
