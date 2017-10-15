@@ -1,37 +1,37 @@
 <head>
-        <title>I'm Hungry</title>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
-    
-    
+  <title>I'm Hungry</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
 
 
-<form class="ui form">
-        <div class="field">
-          <label>Username</label>
-          <input type="text" name="username" placeholder="username">
-        </div>
-        <div class="field">
-          <label>Email</label>
-          <input type="text" name="email" placeholder="email">
-        </div>
-        <div class="field">
-                <label>Passowrd</label>
-                <input type="text" name="pw" placeholder="Password">
-              </div>
-              <div class="field">
-                    <label>Password Confirmation</label>
-                    <input type="text" name="pw2" placeholder="Confirm Password">
-                  </div>      
-        <div class="field">
-          <div class="ui checkbox">
-            <input type="checkbox" tabindex="0" class="hidden">
-            <label>I agree to the Terms and Conditions</label>
-          </div>
-        </div>
-        <button class="ui button" type="submit">Submit</button>
-      </form>
+
+
+  <form class="ui form" method="POST">
+    <div class="field">
+      <label>Username</label>
+      <input type="text" name="username" placeholder="Username">
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input type="text" name="email" placeholder="Valid Email (e.g. email@yahoo.com)">
+    </div>
+    <div class="field">
+      <label>Passowrd</label>
+      <input type="text" name="pw" placeholder="Password">
+    </div>
+    <div class="field">
+      <label>Password Confirmation</label>
+      <input type="text" name="pw2" placeholder="Confirm Password (Passwords must match)">
+    </div>
+    <div class="field">
+      <div class="ui checkbox">
+        <input type="checkbox" tabindex="0" class="hidden">
+        <label>I agree to the Terms and Conditions</label>
+      </div>
+    </div>
+    <button class="ui button" type="submit">Submit</button>
+  </form>
