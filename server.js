@@ -15,6 +15,11 @@ app.listen(PORT, function() {
     console.log('Server running on port: ' + PORT);
 });
 
+app.use(express.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
 // ----------------- DB Setup
 var connection = mysql.createConnection({
     host     : process.env.RDS_HOSTNAME,
@@ -84,10 +89,14 @@ app.get('/events/:id', (req, res) => {
         for(var i = 0; i < eventList.length; i++) {
             eventListIDs.push(eventList[i].event_id);
         }
-        query = 'SELECT accountName, eventAttend.event_id '+
-                'FROM account '+
-                'JOIN eventAttend ON eventAttend.user_id = account.id '+
-                'WHERE event_id IN (?)';
+        if(eventListIDs.length != 0) {
+            query = 'SELECT accountName, eventAttend.event_id '+
+                    'FROM account '+
+                    'JOIN eventAttend ON eventAttend.user_id = account.id '+
+                    'WHERE event_id IN (?)';
+        } else {
+            query = 'SELECT' + " 'ID' " + 'LIMIT 0';
+        }
         connection.query(query, [eventListIDs], function(error, results) {
             if(error) {
                 console.log(error);
@@ -102,6 +111,7 @@ app.get('/events/:id', (req, res) => {
             client.business(req.params.id).then(response => {
                 res.render('pages/events.ejs', {
                     result : response.jsonBody,
+                    location: req.params.id,
                     eventList : eventList,
                     attendees : attendees
                 });
@@ -113,17 +123,19 @@ app.get('/events/:id', (req, res) => {
 });
 
 app.post('/addEvent', (req, res) => {
-    console.log(req.query);
-    var date = req.body;
-    console.log(date);
-    var prevURL = req.header('Referer') || '/';
-    //res.redirect(prevURL);
+    var date = new Date(req.body.date).toISOString().replace('T', ' ').slice(0,19);
+    var location = req.body.location;
+    var query = "INSERT INTO event (location, event_time) "+
+                "VALUES ('" + location + "', '" + date + "')";
+    connection.query(query, function(error, results) {
+        if(error) console.log(error);
+        var prevURL = req.header('Referer') || '/';
+        res.redirect(prevURL);
+    });
+
 });
 
 
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
 
 app.get('/login', (req, res) => {
     res.render('pages/login.ejs');

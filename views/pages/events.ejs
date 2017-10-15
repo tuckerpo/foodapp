@@ -18,29 +18,33 @@
     <% include ../partials/headerBar.ejs %>
 </header>
 <body>
-    <%= result.name %>
+    <h3><%= result.name %></h3>
+    <button class='addEvent ui labeled icon button'>
+        <i class='add icon'></i>
+        Add Event
+    </button>
     <a href=<%= result.url %> >Yelp</a>
-    <button class=addEvent>Add Event</button>
     <form class='ui form' action='/addEvent' method='post' id=calendarForm>
+        <input type="hidden" name="location" value=<%= location %> />
         <div class='ui calendar'>
             <div class='ui input left icon'>
                 <i class='calendar icon'></i>
-                <input type='text' name='date' placeholder='Date/Time'>
+                <input id='dateInput' type='text' name='date' placeholder='Date/Time'>
             </div>
         </div>
         <button class='ui button' type=submit required>Submit</button>
     </form>
-    <ul class=eventList>
+
+    <div class='eventListaddEvent ui middle aligned selection list'>
         <% for(var i = 0; i < eventList.length; i++) { %>
-            <li>
+            <div class='item'>
             <%- include('../partials/event', {
                 event: eventList[i],
                 attendees: attendees[i]
             }); %>
-            </li>
+            </div>
         <% } %>
-    </ul>
-
+    </div>
 </body>
 </html>
 
