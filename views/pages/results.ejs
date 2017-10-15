@@ -23,7 +23,9 @@
 <body>
     <% resultList.forEach( item => { %>
         <%- include('../partials/resultItem', {
-            item: item
+        <div class="ui container">
+	<p>item: item</p>
+	</div>
         }); %>
         <br>
     <% }) %>
