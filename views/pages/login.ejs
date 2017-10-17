@@ -8,14 +8,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
 
 
-    <div class="ui middle aligned center aligned grid">
+    <!-- <div class="ui middle aligned center aligned grid">
         <div class="column">
             <h2 class="ui image header">
                 <div class="content">
                     Log-in to your account
                 </div>
             </h2>
-            <form action="https://s.codepen.io/voltron2112/debug/PqrEPM?" method="POST" class="ui large form">
+            <form class="ui large form" method="POST" >
                 <div class="ui stacked secondary  segment">
                     <div class="field">
                         <div class="ui left icon input">
@@ -41,4 +41,19 @@
                 <a href="/register">Register</a>
             </div>
         </div>
-    </div>
+    </div> -->
+    <form class="ui form" method="POST">
+        <div class="field">
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Username">
+        </div>
+        <div class="field">
+            <label>Password</label>
+            <input type="text" name="pw" placeholder="Password">
+        </div>
+
+        <div class="field">
+        </div>
+        <button class="ui button" type="submit">Submit</button>
+        <button class="ui button" type="submit"><a href="/register">Don't Have An Account? Register</a></button>
+    </form>
