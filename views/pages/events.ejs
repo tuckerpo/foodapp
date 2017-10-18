@@ -40,7 +40,8 @@
             <div class='item'>
             <%- include('../partials/event', {
                 event: eventList[i],
-                attendees: attendees[i]
+                attendees: attendees[i],
+                userId: userId
             }); %>
             </div>
         <% } %>
@@ -54,10 +55,16 @@ $(document).ready(function() {
     $('#calendarForm').hide();
     // Event handler to add user to event
     $('.attend').click(function() {
-        // #TODO query DB
-        // if not attending
-        // insert into db
-        // and append name to list
+        var data = {
+            id: this.getAttribute('data-id')
+        }
+        console.log(this.getAttribute('data-id'));
+        $.post('/attendEvent', {
+            id: this.getAttribute('data-id'),
+            eventId: $('.attend').parent().attr("id").substring(5,)
+        }, function(data) {
+            alert('success');
+        });
     });
     // Event handler to add new event
     $('.addEvent').click(function() {
