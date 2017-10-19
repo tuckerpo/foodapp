@@ -1,10 +1,14 @@
 <div class=event id=event<%= event.event_id %>>
     <div class='ui small header'>Event ID: <%= event.event_id %></div>
     <%= event.event_time %>
-    <ul class=attendees>
+    <ul id=attendees<%= event.event_id %>>
     <% attendees.forEach( at => { %>
         <li><%= at.accountName %></li>
     <% }) %>
     </ul>
-    <button class=attend>ATTEND</button><br>
+    <% if(attendees.find( at => at.accountName == username)) { %>
+        <button class=attend id=btn<%= event.event_id %> data-id=<%= userId %> >UNATTEND</button><br>
+    <% } else { %>
+        <button class=attend id=btn<%= event.event_id %> data-id=<%= userId %> >ATTEND</button><br>
+    <% } %>
 </div>

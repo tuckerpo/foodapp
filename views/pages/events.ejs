@@ -16,6 +16,7 @@
 </head>
 <header>
     <% include ../partials/headerBar.ejs %>
+    <div id=username data-username=<%= username %> style="display:none;">
 </header>
 <body>
     <h3><%= result.name %></h3>
@@ -40,7 +41,8 @@
             <div class='item'>
             <%- include('../partials/event', {
                 event: eventList[i],
-                attendees: attendees[i]
+                attendees: attendees[i],
+                userId: userId
             }); %>
             </div>
         <% } %>
@@ -54,10 +56,25 @@ $(document).ready(function() {
     $('#calendarForm').hide();
     // Event handler to add user to event
     $('.attend').click(function() {
-        // #TODO query DB
-        // if not attending
-        // insert into db
-        // and append name to list
+        var username = $('#username').attr('data-username');
+        var btnId = $(this).attr('id');
+        var data = {
+            id: this.getAttribute('data-id')
+        }
+        $.post('/attendEvent', {
+            id: this.getAttribute('data-id'),
+            eventId: btnId.substring(3,)
+        }, function(data) {
+            var attendButton = $('#'+btnId);
+            if($(attendButton).text() === "ATTEND") {
+                attendButton.text('UNATTEND');
+                $("#attendees"+btnId.substring(3,)).append('<li>'+username+'</li');
+            } else {
+                $("#attendees"+btnId.substring(3,)+" li:contains('"+username+"')").remove();
+                attendButton.text('ATTEND');
+            }
+
+        });
     });
     // Event handler to add new event
     $('.addEvent').click(function() {

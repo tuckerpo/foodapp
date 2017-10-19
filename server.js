@@ -30,6 +30,8 @@ app.use(session({
     secret: 'kjhfiuFaskHJDKJHFyr982yrqwcuyrig;;1981*&(*$&#*&29',
     duration: 30 * 60 * 1000,
     activeDuration: 5 * 60 * 1000,
+    saveUninitialized: true,
+    resave: true
 }));
 
 // ----------------- DB Setup
@@ -75,11 +77,12 @@ function requireLogin(req, res, next) {
 // more sessions middleware
 app.use(function (req, res, next) {
     if (req.session && req.session.user) {
-        connection.query("SELECT accountName FROM `foodapp`.`account` WHERE accountName= ?", [req.session.user], function (err, result, fields) {
+        connection.query("SELECT id, accountName FROM `foodapp`.`account` WHERE accountName= ?", [req.session.user], function (err, result, fields) {
             if (result != '[]') {
                 req.user = result[0].accountName;
                 delete req.user.password; // delete the password from the session
                 req.session.user = result[0].accountName;  //refresh the session value
+                req.session.userId = result[0].id;
                 res.locals.user = result[0].accountName;
             }
             // finishing processing the middleware and run the route
@@ -93,6 +96,7 @@ app.use(function (req, res, next) {
 //-----------Routes
 //Search Page
 app.get('/', requireLogin, (req, res) => {
+
     res.render('pages/index.ejs');
 });
 
@@ -157,7 +161,9 @@ app.get('/events/:id', requireLogin, (req, res) => {
                     result: response.jsonBody,
                     location: req.params.id,
                     eventList: eventList,
-                    attendees: attendees
+                    attendees: attendees,
+                    userId: req.session.userId,
+                    username: req.session.user
                 });
             }).catch(e => {
                 console.log(e);
@@ -179,7 +185,32 @@ app.post('/addEvent', requireLogin, (req, res) => {
 
 });
 
+app.post('/attendEvent', requireLogin, (req, res) => {
+    var id = req.body.id;
+    var eventId = req.body.eventId;
+    var query = "SELECT * FROM eventAttend " +
+                "WHERE user_id=" + id + " AND event_id=" + eventId;
+    var query2 = "INSERT INTO eventAttend (user_id, event_id) " +
+        "VALUES ('" + id + "', '" + eventId + "')";
+    connection.query(query, function (error, results) {
+        if (error) console.log(error);
+        if(results.length == 0) {
+            // Insert into db
+            query = "INSERT INTO eventAttend (user_id, event_id) " +
+                "VALUES ('" + id + "', '" + eventId + "')";
+        } else {
+            // Remove from db
+            query = "DELETE FROM eventAttend " +
+                "WHERE user_id=" + id + " AND event_id=" + eventId;
+        }
+        connection.query(query, function (error, results) {
+            if (error) console.log(error);
+            res.send(req.body);
+        });
+    });
 
+
+})/
 
 app.get('/login', (req, res) => {
     res.render('pages/login.ejs');
@@ -242,7 +273,7 @@ app.post('/login', (req, res) => {
                 console.log('right password!');
                 res.render('pages/index');
             } else {
-                //wrong pw 
+                //wrong pw
                 res.send({
                     "code": 401
                 });
@@ -251,4 +282,3 @@ app.post('/login', (req, res) => {
         }
     })
 });
-
