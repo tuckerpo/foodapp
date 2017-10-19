@@ -162,7 +162,8 @@ app.get('/events/:id', requireLogin, (req, res) => {
                     location: req.params.id,
                     eventList: eventList,
                     attendees: attendees,
-                    userId: req.session.userId
+                    userId: req.session.userId,
+                    username: req.session.user
                 });
             }).catch(e => {
                 console.log(e);
@@ -185,18 +186,29 @@ app.post('/addEvent', requireLogin, (req, res) => {
 });
 
 app.post('/attendEvent', requireLogin, (req, res) => {
-    console.log(req.body);
     var id = req.body.id;
     var eventId = req.body.eventId;
-    var query = "INSERT INTO eventAttend (user_id, event_id) " +
+    var query = "SELECT * FROM eventAttend " +
+                "WHERE user_id=" + id + " AND event_id=" + eventId;
+    var query2 = "INSERT INTO eventAttend (user_id, event_id) " +
         "VALUES ('" + id + "', '" + eventId + "')";
     connection.query(query, function (error, results) {
         if (error) console.log(error);
-        // var prevURL = req.header('Referer') || '/';
-        // res.redirect(prevURL);
+        if(results.length == 0) {
+            // Insert into db
+            query = "INSERT INTO eventAttend (user_id, event_id) " +
+                "VALUES ('" + id + "', '" + eventId + "')";
+        } else {
+            // Remove from db
+            query = "DELETE FROM eventAttend " +
+                "WHERE user_id=" + id + " AND event_id=" + eventId;
+        }
+        connection.query(query, function (error, results) {
+            if (error) console.log(error);
+            res.send(req.body);
+        });
     });
 
-    res.send(req.body);
 
 })/
 
