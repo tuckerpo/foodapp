@@ -243,6 +243,7 @@ app.post('/register', (req, res) => {
         res.render('pages/register.ejs');
     } else {
         console.log('no errors');
+        res.redirect('/');
         // if there were no input errors, register them in the DB
         // or check if they already are
         // if succesfully registered, send splash success page, route back to home
@@ -278,12 +279,10 @@ app.post('/login', (req, res) => {
                 //if pw is correct
                 req.session.user = loadUser;
                 console.log('right password!');
-                res.render('pages/index');
+                res.redirect('/');
             } else {
                 //wrong pw
-                res.send({
-                    "code": 401
-                });
+                res.render('pages/login.ejs');
             }
 
         }
