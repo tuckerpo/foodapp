@@ -6,11 +6,20 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+</head>
+<body>
+<div class="ui menu">
+    <div class="item">
+        <div class="ui button">Home</div>
+    </div>
+    <div class="item">
+        <div class="ui button">
+            <a href="/login">Log-in</a></div>
+        </div>
+    </div>
+</div>
 
-
-
-
-  <form class="ui form" method="POST">
+  <form class="ui form segment success" method="POST">
     <div class="field">
       <label>Username</label>
       <input type="text" name="username" placeholder="Username">
@@ -21,17 +30,88 @@
     </div>
     <div class="field">
       <label>Password</label>
-      <input type="text" name="pw" placeholder="Password">
+      <input type="password" name="pw" placeholder="Password">
     </div>
     <div class="field">
       <label>Password Confirmation</label>
-      <input type="text" name="pw2" placeholder="Confirm Password (Passwords must match)">
+      <input type="password" name="pw2" placeholder="Confirm Password (Passwords must match)">
     </div>
-    <div class="field">
+    <div class="inline field">
       <div class="ui checkbox">
-        <input type="checkbox" tabindex="0" class="hidden">
+        <input type="checkbox" name="terms">
         <label>I agree to the Terms and Conditions</label>
       </div>
     </div>
-    <button class="ui button" type="submit">Submit</button>
+    <div class="ui primary submit button">Submit</button></div>
+	<div class="ui clear button">Clear</div>
+	<div class="field">
+	<label>Already have an account?</label>
+	<a href='/login'>Log In</a>
+	</div>
+	<div class="ui error message"></div>
   </form>
+	<script>
+	$('.ui.form')
+  .form({
+    fields: {
+      username: {
+        identifier: 'username',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please enter a username'
+          }
+        ]
+      },
+     email : {
+        identifier: 'email',
+        rules: [
+          {
+            type   : 'email',
+            prompt : 'Please enter a valid email address'
+          }
+        ]
+      },
+      password1: {
+        identifier: 'pw',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please enter a password'
+          },
+          {
+            type   : 'minLength[9]',
+            prompt : 'Your password must be at least {ruleValue} characters'
+          }
+        ]
+      },
+
+      password: {
+        identifier: 'pw2',
+        rules: [
+          {
+            type   : 'empty',
+            prompt : 'Please confirm your password'
+          },
+          {
+            type   : 'match[pw]',
+            prompt : 'Your password must match '
+          }
+        ]
+      },
+      terms: {
+        identifier: 'terms',
+        rules: [
+          {
+            type   : 'checked',
+            prompt : 'You must agree to the terms and conditions'
+          }
+        ]
+      }
+    }
+  })
+;
+$('form').form('clear');
+$('.ui.checkbox').checkbox('is checked');
+	</script>
+</body>
