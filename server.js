@@ -262,6 +262,13 @@ app.post('/login', (req, res) => {
     var holder = [];
     var loadUser = req.body.username;
     var loadPw = req.body.password;
+    req.checkBody('username', 'Username is required').notEmpty();
+    req.checkBody('pw', 'Password is required').notEmpty();   
+    var err = req.validationErrors()
+    if (err) {
+        console.log('input errors');
+        res.render('pages/login.ejs');
+    } else {
     connection.query("SELECT accountName, password FROM `foodapp`.`account` WHERE accountName= ?", [loadUser], function (err, result, fields) {
         if (!!err) { console.log(err.stack); }
         else {
@@ -281,4 +288,5 @@ app.post('/login', (req, res) => {
 
         }
     })
-});
+}}
+);
