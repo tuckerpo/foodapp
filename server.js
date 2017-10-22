@@ -143,9 +143,9 @@ app.get('/events/:id', requireLogin, (req, res) => {
             eventList[i].event_time = date;
         }
         if (eventListIDs.length != 0) {
-            query = 'SELECT accountName, eventAttend.event_id ' +
-                'FROM account ' +
-                'JOIN eventAttend ON eventAttend.user_id = account.id ' +
+            query = 'SELECT accountName, foodapp.eventAttend.event_id ' +
+                'FROM foodapp.account ' +
+                'JOIN eventAttend ON foodapp.eventAttend.user_id = account.id ' +
                 'WHERE event_id IN (?)';
         } else {
             query = 'SELECT' + " 'ID' " + 'LIMIT 0';
