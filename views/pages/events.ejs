@@ -13,30 +13,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui-calendar/0.0.8/calendar.min.css" />
+    <style>
+        .centered{
+            top:0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 600px;
+        }
+    </style>
 </head>
 <header>
     <% include ../partials/headerBar.ejs %>
     <div id=username data-username=<%= username %> style="display:none;">
 </header>
 <body>
-    <h3><%= result.name %></h3>
-    <button class='addEvent ui labeled icon button'>
-        <i class='add icon'></i>
-        Add Event
-    </button>
-    <a href=<%= result.url %> >Yelp</a>
-    <form class='ui form' action='/addEvent' method='post' id=calendarForm>
-        <input type="hidden" name="location" value=<%= location %> />
-        <div class='ui calendar'>
-            <div class='ui input left icon'>
-                <i class='calendar icon'></i>
-                <input id='dateInput' type='text' name='date' placeholder='Date/Time'>
-            </div>
-        </div>
-        <button class='ui button' type=submit required>Submit</button>
-    </form>
+    <div id="main" class="centered">
+        <h1 class='ui header'><%= result.name %></h1>
+        <button class='addEvent ui labeled icon button'>
+            <i class='add icon'></i>
+            Add Event
+        </button>
+        <a href=<%= result.url %> >Yelp</a>
 
-    <div class='eventListaddEvent ui middle aligned selection list'>
+        <form class='ui form' action='/addEvent' method='post' id=calendarForm>
+            <input type="hidden" name="location" value=<%= location %> />
+            <div class='ui calendar'>
+                <div class='ui input left icon'>
+                    <i class='calendar icon'></i>
+                    <input id='dateInput' type='text' name='date' placeholder='Date/Time'>
+                </div>
+            </div>
+            <button class='ui button' type=submit required>Submit</button>
+        </form>
+    <div class='eventListaddEvent ui divided items middle aligned selection list'>
         <% for(var i = 0; i < eventList.length; i++) { %>
             <div class='item'>
             <%- include('../partials/event', {
@@ -47,7 +58,11 @@
             </div>
         <% } %>
     </div>
+    </div>
 </body>
+<footer>
+<br><br><br>
+</footer>
 </html>
 
 <script type='text/javascript'>
@@ -68,7 +83,7 @@ $(document).ready(function() {
             var attendButton = $('#'+btnId);
             if($(attendButton).text() === "ATTEND") {
                 attendButton.text('UNATTEND');
-                $("#attendees"+btnId.substring(3,)).append('<li>'+username+'</li');
+                $("#attendees"+btnId.substring(3,)).append("<li>"+username+'</li');
             } else {
                 $("#attendees"+btnId.substring(3,)+" li:contains('"+username+"')").remove();
                 attendButton.text('ATTEND');

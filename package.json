@@ -17,16 +17,17 @@
   },
   "homepage": "https://github.com/TheNergaL/foodapp#readme",
   "dependencies": {
+    "bcryptjs": "*",
+    "body-parser": "*",
     "dotenv": "^4.0.0",
     "ejs": "^2.5.7",
     "express": "^4.16.1",
-    "memory-cache": "^0.2.0",
-    "mysql": "^2.15.0",
-    "yelp-fusion": "^1.0.3",
-    "body-parser": "*",
-    "bcryptjs": "*",
+    "express-session": "*",
     "express-validator": "*",
-    "express-session": "*"
+    "memory-cache": "^0.2.0",
+    "moment": "^2.19.1",
+    "mysql": "^2.15.0",
+    "yelp-fusion": "^1.0.3"
   },
   "engines": {
     "node": "8.6.0",
