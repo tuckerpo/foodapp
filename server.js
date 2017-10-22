@@ -268,22 +268,24 @@ app.post('/login', (req, res) => {
     var holder = [];
     var loadUser = req.body.username;
     var loadPw = req.body.password;
-    req.checkBody('username', 'Username is required').notEmpty();
-    req.checkBody('pw', 'Password is required').notEmpty();   
     var err = req.validationErrors()
     if (err) {
         console.log('input errors');
         res.render('pages/login.ejs');
     } else {
     connection.query("SELECT accountName, password FROM `foodapp`.`account` WHERE accountName= ?", [loadUser], function (err, result, fields) {
-        if (!!err) { console.log(err.stack); }
+        if (!!err) {
+            console.log(err.stack);
+        }
         else {
             // successful query
             holder = result;
-            if (bcrypt.compare(loadPw, holder[0].password)) {
+            if(!holder[0]) {
+                res.render('pages/login.ejs');
+            }
+            else if (bcrypt.compareSync(loadPw, holder[0].password)) {
                 //if pw is correct
                 req.session.user = loadUser;
-                console.log('right password!');
                 res.redirect('/');
             } else {
                 //wrong pw
