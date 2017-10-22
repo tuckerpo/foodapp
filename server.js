@@ -8,6 +8,7 @@ var expressValidator = require('express-validator');
 var bodyParser = require('body-parser')
 var bcrypt = require('bcryptjs');
 var session = require('express-session')
+var moment = require('moment');
 require('dotenv').config();
 var app = express();
 app.set('view engine', 'ejs');
@@ -97,7 +98,9 @@ app.use(function (req, res, next) {
 //Search Page
 app.get('/', requireLogin, (req, res) => {
 
-    res.render('pages/index.ejs');
+    res.render('pages/index.ejs', {
+        username: req.session.user
+    });
 });
 
 app.get('/logout', requireLogin, (req, res) => {
@@ -136,6 +139,8 @@ app.get('/events/:id', requireLogin, (req, res) => {
         var eventListIDs = [];
         for (var i = 0; i < eventList.length; i++) {
             eventListIDs.push(eventList[i].event_id);
+            var date = moment(eventList[i].event_time).format("LLLL").replace(',', '').split(' ');
+            eventList[i].event_time = date;
         }
         if (eventListIDs.length != 0) {
             query = 'SELECT accountName, eventAttend.event_id ' +
@@ -173,7 +178,7 @@ app.get('/events/:id', requireLogin, (req, res) => {
 });
 
 app.post('/addEvent', requireLogin, (req, res) => {
-    var date = new Date(req.body.date).toISOString().replace('T', ' ').slice(0, 19);
+    var date = moment(new Date(req.body.date)).format("YYYY-MM-DD HH:mm:ss");
     var location = req.body.location;
     var query = "INSERT INTO event (location, event_time) " +
         "VALUES ('" + location + "', '" + date + "')";
