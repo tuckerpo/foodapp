@@ -248,6 +248,7 @@ app.post('/register', (req, res) => {
         res.render('pages/register.ejs');
     } else {
         console.log('no errors');
+        res.redirect('/');
         // if there were no input errors, register them in the DB
         // or check if they already are
         // if succesfully registered, send splash success page, route back to home
@@ -267,6 +268,13 @@ app.post('/login', (req, res) => {
     var holder = [];
     var loadUser = req.body.username;
     var loadPw = req.body.password;
+    req.checkBody('username', 'Username is required').notEmpty();
+    req.checkBody('pw', 'Password is required').notEmpty();   
+    var err = req.validationErrors()
+    if (err) {
+        console.log('input errors');
+        res.render('pages/login.ejs');
+    } else {
     connection.query("SELECT accountName, password FROM `foodapp`.`account` WHERE accountName= ?", [loadUser], function (err, result, fields) {
         if (!!err) { console.log(err.stack); }
         else {
@@ -276,14 +284,13 @@ app.post('/login', (req, res) => {
                 //if pw is correct
                 req.session.user = loadUser;
                 console.log('right password!');
-                res.render('pages/index');
+                res.redirect('/');
             } else {
                 //wrong pw
-                res.send({
-                    "code": 401
-                });
+                res.render('pages/login.ejs');
             }
 
         }
     })
-});
+}}
+);
