@@ -111,7 +111,7 @@ app.get('/logout', requireLogin, (req, res) => {
 app.get('/results', requireLogin, (req, res) => {
     var zip_code = req.query.zip_code;
     var keyword = req.query.keyword;
-    if(req.query.keyword.length && req.query.zip_code.length) {
+    if(req.query.zip_code.length) {
         client.search({
             term: keyword,
             location: zip_code
