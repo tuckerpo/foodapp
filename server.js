@@ -230,6 +230,8 @@ app.post('/attendEvent', requireLogin, (req, res) => {
 
 
 })/
+    
+#This is an edit for the CSE442 activity on 10/23/17
 
 app.get('/login', (req, res) => {
     res.render('pages/login.ejs');
