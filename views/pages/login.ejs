@@ -6,8 +6,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
-
-
+    <style>
+        .centered{
+            top:0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 350px;
+            margin-top: 200px
+        }
+    </style>
+</head>
     <!-- <div class="ui middle aligned center aligned grid">
         <div class="column">
             <h2 class="ui image header">
@@ -42,18 +52,20 @@
             </div>
         </div>
     </div> -->
-    <form class="ui form" method="POST">
-        <div class="field">
-            <label>Username</label>
-            <input type="text" name="username" placeholder="Username">
-        </div>
-        <div class="field">
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Password">
-        </div>
+    <div class=centered>
+        <form class="ui form" method="POST">
+            <div class="field">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Username">
+            </div>
+            <div class="field">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Password">
+            </div>
 
-        <div class="field">
-        </div>
-        <button class="ui button" type="submit">Submit</button>
-        <button class="ui button" type="submit"><a href="/register">Don't Have An Account? Register</a></button>
-    </form>
+            <div class="field">
+            </div>
+            <button class="ui button" type="submit">Submit</button>
+            <button class="ui button" type="submit"><a href="/register">Don't Have An Account? Register</a></button>
+        </form>
+    </div>
