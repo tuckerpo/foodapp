@@ -178,11 +178,17 @@ app.get('/events/:id', requireLogin, (req, res) => {
 });
 
 app.post('/addEvent', requireLogin, (req, res) => {
+    if(!req.body.date) {
+        // console.log(req.header('Referer') || '/')
+        var prevURL = req.header('Referer') || '/';
+        res.redirect(prevURL);
+        return;
+    }
     var date = moment(new Date(req.body.date)).format("YYYY-MM-DD HH:mm:ss");
     var location = req.body.location;
     var query = "INSERT INTO event (location, event_time) " +
-        "VALUES ('" + location + "', '" + date + "')";
-    connection.query(query, function (error, results) {
+        "VALUES (?, ?)";
+    connection.query(query, [location, date], function (error, results) {
         if (error) console.log(error);
         var prevURL = req.header('Referer') || '/';
         res.redirect(prevURL);
@@ -194,10 +200,8 @@ app.post('/attendEvent', requireLogin, (req, res) => {
     var id = req.body.id;
     var eventId = req.body.eventId;
     var query = "SELECT * FROM eventAttend " +
-                "WHERE user_id=" + id + " AND event_id=" + eventId;
-    var query2 = "INSERT INTO eventAttend (user_id, event_id) " +
-        "VALUES ('" + id + "', '" + eventId + "')";
-    connection.query(query, function (error, results) {
+                "WHERE user_id=? AND event_id=?";
+    connection.query(query, [id, eventId], function (error, results) {
         if (error) console.log(error);
         if(results.length == 0) {
             // Insert into db
