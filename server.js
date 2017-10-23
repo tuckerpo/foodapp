@@ -111,15 +111,25 @@ app.get('/logout', requireLogin, (req, res) => {
 app.get('/results', requireLogin, (req, res) => {
     var zip_code = req.query.zip_code;
     var keyword = req.query.keyword;
-    client.search({
-        term: keyword,
-        location: zip_code
-    }).then(response => {
-        //console.log(response.jsonBody.businesses);
-        res.render('pages/results.ejs', {
-            resultList: response.jsonBody.businesses
-        });
-    });
+    if(req.query.zip_code.length) {
+        client.search({
+            term: keyword,
+            location: zip_code
+        }).then(response => {
+            //console.log(response.jsonBody.businesses);
+            if(!response) {
+                res.redirect('/');
+            }
+            res.render('pages/results.ejs', {
+                resultList: response.jsonBody.businesses
+            });
+        }).catch(e => {
+            console.log(e);
+        })
+    }
+    else {
+        res.redirect('/');
+    }
 });
 
 // Individual Restaurants Page
@@ -206,13 +216,13 @@ app.post('/attendEvent', requireLogin, (req, res) => {
         if(results.length == 0) {
             // Insert into db
             query = "INSERT INTO eventAttend (user_id, event_id) " +
-                "VALUES ('" + id + "', '" + eventId + "')";
+                "VALUES (?, ?)";
         } else {
             // Remove from db
             query = "DELETE FROM eventAttend " +
-                "WHERE user_id=" + id + " AND event_id=" + eventId;
+                "WHERE user_id=? AND event_id=?";
         }
-        connection.query(query, function (error, results) {
+        connection.query(query, [id, eventId], function (error, results) {
             if (error) console.log(error);
             res.send(req.body);
         });

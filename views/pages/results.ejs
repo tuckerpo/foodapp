@@ -21,13 +21,18 @@
     <% include ../partials/headerBar.ejs %>
 </header>
 <body>
-    <% resultList.forEach( item => { %>
-        <%- include('../partials/resultItem', {
-            item: item
-        }); %>
-        <br>
-    <% }) %>
-
+    <%if (resultList.length == 0) { %>
+        <div class='ui large header'>
+            No results.
+        </div>
+    <% } else {%>
+        <% resultList.forEach( item => { %>
+            <%- include('../partials/resultItem', {
+                item: item
+            }); %>
+            <br>
+        <% }) %>
+   <% } %>
 </body>
 </html>
 
