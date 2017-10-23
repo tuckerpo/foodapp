@@ -1,0 +1,9 @@
+*.swp
+*.swl
+*.swm
+*.swo
+*.swn
+*.env
+node_modules
+node_modules/
+node_modules/*
