@@ -229,7 +229,9 @@ app.get('/register', (req, res) => {
     res.render('pages/register.ejs');
 });
 
-
+app.get('/about', (req, res) => {
+    res.render('pages/about.ejs');
+});
 // get registration input
 app.post('/register', (req, res) => {
 
