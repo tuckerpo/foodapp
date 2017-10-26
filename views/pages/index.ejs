@@ -12,13 +12,6 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
-    <script src="js/accordion.js"></script>
-
-    <script language='javascript'>
-        $(document).ready(function () {
-            $('.ui.accordion').accordion();
-        });
-    </script>
 
 </head>
 
@@ -92,3 +85,23 @@
 </body>
 
 </html>
+
+<script>
+$(document).ready(function() {
+    $('.ui.accordion').accordion();
+
+    if("geolocation" in navigator) {
+        var geo = navigator.geolocation;
+        console.log(geo);
+        geo.getCurrentPosition(function(position) {
+            var lat = position.coords.latitude;
+            var long = position.coords.longitude;
+            console.log(lat);
+            !('[name=zip_code]').val(position.coords.latitude);
+        });
+    } else {
+        console.log('error');
+    }
+
+});
+</script>
