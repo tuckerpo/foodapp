@@ -75,6 +75,7 @@ function requireLogin(req, res, next) {
 };
 
 
+
 // more sessions middleware
 app.use(function (req, res, next) {
     if (req.session && req.session.user) {
@@ -264,16 +265,19 @@ app.post('/register', (req, res) => {
         res.render('pages/register.ejs');
     } else {
         console.log('no errors');
+       // res.redirect('/');
+        req.session.user = username;
         res.redirect('/');
         // if there were no input errors, register them in the DB
         // or check if they already are
         // if succesfully registered, send splash success page, route back to home
         // if already in, route back to homepage
+        
         connection.query("INSERT IGNORE INTO foodapp.account (accountName, email, password) VALUES (?,?,?)", [username, email, hash]), function (err, result, fields) {
             if (err) { console.log(err.stack); }
             else {
                 // console.log(result);
-                res.render('pages/index');
+                
             }
         }
     }
