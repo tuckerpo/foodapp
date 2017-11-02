@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express');
+var request = require('request');
 var mysql = require('mysql');
 var yelp = require('yelp-fusion');
 var cache = require('memory-cache');
@@ -242,6 +243,23 @@ app.get('/register', (req, res) => {
 app.get('/about', (req, res) => {
     res.render('pages/about.ejs');
 });
+
+app.get('/zipcode', (req, res) => { 
+    var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+
+                req.query.lat+","+req.query.long+
+                "&key="+process.env.GEOCODING_API_KEY;
+
+    request(url, function(error, response, body) {
+        if(error) console.log(error);
+        var json = JSON.parse(body);
+        var zipcode = json['results'][0]['address_components'][7]['long_name'];
+        if(zipcode) {
+            res.send(zipcode);
+        }
+    });
+    res.send();
+});
+
 // get registration input
 app.post('/register', (req, res) => {
 

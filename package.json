@@ -27,6 +27,7 @@
     "memory-cache": "^0.2.0",
     "moment": "^2.19.1",
     "mysql": "^2.15.0",
+    "request": "^2.83.0",
     "yelp-fusion": "^1.0.3"
   },
   "engines": {
