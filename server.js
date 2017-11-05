@@ -257,7 +257,8 @@ app.get('/zipcode', (req, res) => {
             res.send(zipcode);
         }
     });
-    res.send();
+    // don't res send twice, especially not asynchronously 
+   // res.send();
 });
 
 // get registration input
