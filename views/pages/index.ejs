@@ -13,13 +13,6 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
-    <script src="js/accordion.js"></script>
-
-    <script language='javascript'>
-        $(document).ready(function () {
-            $('.ui.accordion').accordion();
-        });
-    </script>
 
 </head>
 
@@ -54,8 +47,10 @@ div{
             <form class='ui form' action='/results' method='get'>
                 <h2 class='ui dividing header'>Whatchu want?</h2>
                 <div class='field'>
-                    <label>Zip Code</label>
-                    <input type='text' pattern='[0-9]{5}' placeholder='12345' name='zip_code'>
+                    <label>Zip Code
+                        (Allow autolocation for quicker searches!)
+                    </label>
+                    <input id='zip_code' type='text' pattern='[0-9]{5}' placeholder='12345' name='zip_code'>
                 </div>
                 <div class='field'>
                     <label>Keyword</label>
@@ -114,3 +109,27 @@ div{
 	</body>
 
 </html>
+
+<script>
+$(document).ready(function() {
+    $('.ui.accordion').accordion();
+
+    if("geolocation" in navigator) {
+        var geo = navigator.geolocation;
+        geo.getCurrentPosition(function(position) {
+            $.get("/zipcode", { 
+                    lat: position.coords.latitude,
+                    long: position.coords.longitude 
+                }, 
+                function(data) {
+                    if(data) {
+                        $('#zip_code').val(data);
+                    }
+            });
+        });
+    } else {
+        console.log('error');
+    }
+
+});
+</script>
