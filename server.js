@@ -76,6 +76,7 @@ function requireLogin(req, res, next) {
 };
 
 
+
 // more sessions middleware
 app.use(function (req, res, next) {
     if (req.session && req.session.user) {
