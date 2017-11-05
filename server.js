@@ -216,7 +216,7 @@ app.post('/attendEvent', requireLogin, (req, res) => {
         if (error) console.log(error);
         if(results.length == 0) {
             // Insert into db
-            query = "INSERT INTO eventAttend (user_id, event_id) " +
+            query = "INSERT IGNORE INTO eventAttend (user_id, event_id) " +
                 "VALUES (?, ?)";
         } else {
             // Remove from db
@@ -257,7 +257,7 @@ app.get('/zipcode', (req, res) => {
             res.send(zipcode);
         }
     });
-    res.send();
+    // res.send();
 });
 
 // get registration input
@@ -276,24 +276,33 @@ app.post('/register', (req, res) => {
     req.checkBody('email', 'Valid email required').isEmail();
     req.checkBody('pw', 'Password is required').notEmpty();
     req.checkBody('pw2', 'Passwords don\'t match!').equals(req.body.pw);
-    var err = req.validationErrors()
-    if (err) {
+    var error = req.validationErrors()
+    if (error) {
         console.log('input errors');
         res.render('pages/register.ejs');
     } else {
         console.log('no errors');
-        res.redirect('/');
         // if there were no input errors, register them in the DB
         // or check if they already are
         // if succesfully registered, send splash success page, route back to home
         // if already in, route back to homepage
-        connection.query("INSERT IGNORE INTO foodapp.account (accountName, email, password) VALUES (?,?,?)", [username, email, hash]), function (err, result, fields) {
-            if (err) { console.log(err.stack); }
+        var q = connection.query("INSERT INTO foodapp.account (accountName, email, password) VALUES (?,?,?)", 
+                        [username, email, hash], function (err, result, fields) {
+            if (err) { 
+                console.log(err.code);
+                res.render('pages/register.ejs', {duperr: 'true'});
+            }
             else {
                 // console.log(result);
-                res.render('pages/index');
+                res.render('pages/index.ejs');
             }
-        }
+            // console.log('end');
+        });
+        q.on('error', function() {
+            console.log('Duplicate account attempted registration');
+            // res.send('dup');
+            // res.redirect('/');
+        });
     }
 
 });
