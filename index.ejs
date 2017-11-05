@@ -1,0 +1,116 @@
+<!-- views/pages/index.ejs -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>I'm Hungry</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+    <script src="js/accordion.js"></script>
+
+    <script language='javascript'>
+        $(document).ready(function () {
+            $('.ui.accordion').accordion();
+        });
+    </script>
+
+</head>
+
+<body>
+<header>
+    <% include ../partials/headerBar.ejs %>
+</header>
+<style>
+body{
+	color: white !important;
+	text-shadow: 1px 1px 0px #000;
+	background-image: url(https://i.imgur.com/9XSyiO2.jpg);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+h2{
+	color: white !important;
+	text-shadow: 1px 1px 0px #000;
+}
+label{
+	color: white !important;
+	text-shadow: 1px 1px 0px #000;
+}
+div{
+	color: white !important;
+	text-shadow: 1px 1px 0px #000;
+}
+</style>
+    <br><br>
+    <div class='ui center aligned grid'>
+        <div class='column four wide'>
+            <form class='ui form' action='/results' method='get'>
+                <h2 class='ui dividing header'>Whatchu want?</h2>
+                <div class='field'>
+                    <label>Zip Code</label>
+                    <input type='text' pattern='[0-9]{5}' placeholder='12345' name='zip_code'>
+                </div>
+                <div class='field'>
+                    <label>Keyword</label>
+                    <input type='text' placeholder='ex. Peach Cobbler' name='keyword'>
+                </div>
+                <!-- <div class="field">
+                    <label>Allergies</label>
+                    <input type="text" placeholder="ex. Peanuts, Seafood" </div>
+                    <div class='fields'>
+                        <div class='field'>
+                            <div class='ui toggle checkbox'>
+                                <input type='checkbox'>
+                                <label>Delivery1</label>
+                            </div>
+                        </div>
+                        <div class='field'>
+                            <div class='ui toggle checkbox'>
+                                <input type='checkbox'>
+                                <label>Pickup</label>
+                            </div>
+                        </div>
+                    </div> -->
+                    <button class='ui button' type='submit'>Submit</button>
+            </form>
+            <div class="ui accordion">
+                <div class="active title">
+                    <i class="dropdown icon"></i>
+                    What is "I'm Hungry"?
+                </div>
+                <div class="active content">
+                    <p>"I'm Hungry" gives you suggestions on where to eat based on your input.
+                        Let us know what you're in the mood for, we'll do the rest.
+                    </p>
+                </div>
+                <div class="title">
+                    <i class="dropdown icon"></i>
+                    How Does It Work?
+                </div>
+                <div class="content">
+                    <p>We take your input and bounce it off a few different search engines, returning just want you
+                        want to see, saving you the trouble of having to sift through search results yourself.
+                    </p>
+                </div>
+                <div class="title">
+                    <i class="dropdown icon"></i>
+                    Found A Bug?
+                </div>
+                <div class="content">
+                    <p>Please report any and all bugs on our main git repository by <a href="https://github.com/TheNergaL/foodapp/issues/new">clicking here.</a></p>
+                </div>
+            </div>
+            </div>
+        </div>
+
+<style>
+	</body>
+
+</html>
