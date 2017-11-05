@@ -237,7 +237,7 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-    res.render('pages/register.ejs');
+    res.render('pages/register.ejs', {duperr: 'false'});
 });
 
 app.get('/about', (req, res) => {
@@ -279,7 +279,7 @@ app.post('/register', (req, res) => {
     var error = req.validationErrors()
     if (error) {
         console.log('input errors');
-        res.render('pages/register.ejs');
+        res.render('pages/register.ejs', {duperr: 'false'});
     } else {
         console.log('no errors');
         // if there were no input errors, register them in the DB
@@ -293,7 +293,7 @@ app.post('/register', (req, res) => {
                 res.render('pages/register.ejs', {duperr: 'true'});
             }
             else {
-                // console.log(result);
+                console.log(result);
                 res.render('pages/index.ejs');
             }
             // console.log('end');

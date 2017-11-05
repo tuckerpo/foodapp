@@ -19,6 +19,14 @@
     </div>
 </div>
 
+  <% if(duperr == 'true') { %>
+    <div class="error_msg ui warning message">
+      <div class="header">
+        Username has already been registered.
+      </div>  
+    </div>
+  <% } %>
+
   <form class="ui form segment success" method="POST">
     <div class="field">
       <label>Username</label>
