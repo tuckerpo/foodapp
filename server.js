@@ -296,7 +296,8 @@ app.post('/register', (req, res) => {
             }
             else {
                 console.log(result);
-                res.render('pages/index.ejs');
+                req.session.user = username;
+                res.redirect('/');
             }
             // console.log('end');
         });
