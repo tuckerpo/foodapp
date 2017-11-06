@@ -70,6 +70,11 @@ $(document).ready(function() {
     $('.ui.calendar').calendar();
     $('#calendarForm').hide();
     // Event handler to add user to event
+    $(":button").each(function(index) {
+        if ($(this).text() === "UNATTEND"){
+           this.style.background='#FF0000';
+        }
+    });
     $('.attend').click(function() {
         var username = $('#username').attr('data-username');
         var btnId = $(this).attr('id');
@@ -83,10 +88,12 @@ $(document).ready(function() {
             var attendButton = $('#'+btnId);
             if($(attendButton).text() === "ATTEND") {
                 attendButton.text('UNATTEND');
+                document.getElementById(btnId).style.background='#FF0000';
                 $("#attendees"+btnId.substring(3,)).append("<li>"+username+'</li');
             } else {
                 $("#attendees"+btnId.substring(3,)+" li:contains('"+username+"')").remove();
                 attendButton.text('ATTEND');
+                document.getElementById(btnId).style.background='#E0E0E0';
             }
 
         });
