@@ -253,7 +253,7 @@ app.get('/zipcode', (req, res) => {
     request(url, function(error, response, body) {
         if(error) console.log(error);
         var json = JSON.parse(body);
-        var zipcode = json['results'][0]['address_components'][7]['long_name'];
+        var zipcode = json['results'][0]['address_components'][7]['short_name'];
         if(zipcode) {
             res.send(zipcode);
         }
