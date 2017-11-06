@@ -249,11 +249,17 @@ app.get('/zipcode', (req, res) => {
     var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+
                 req.query.lat+","+req.query.long+
                 "&key="+process.env.GEOCODING_API_KEY;
-
     request(url, function(error, response, body) {
         if(error) console.log(error);
+        
         var json = JSON.parse(body);
-        var zipcode = json['results'][0]['address_components'][7]['short_name'];
+        var addr_comp = json['results'][0]['address_components'];
+        var zipcode;
+        for(var i = 0; i < addr_comp.length; i++) {
+            if(addr_comp[i]['types'][0] == 'postal_code') {
+                zipcode = addr_comp[i]['short_name'];
+            }
+        }
         if(zipcode) {
             res.send(zipcode);
         }
