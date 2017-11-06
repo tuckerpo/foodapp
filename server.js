@@ -101,7 +101,7 @@ app.use(function (req, res, next) {
 app.get('/', requireLogin, (req, res) => {
 
     res.render('pages/index.ejs', {
-        username: req.session.user
+        username: req.session.user,
     });
 });
 
@@ -234,7 +234,7 @@ app.post('/attendEvent', requireLogin, (req, res) => {
 })/
 
 app.get('/login', (req, res) => {
-    res.render('pages/login.ejs');
+    res.render('pages/login.ejs', {success: req.session['success']});
 });
 
 app.get('/register', (req, res) => {
@@ -296,7 +296,9 @@ app.post('/register', (req, res) => {
             }
             else {
                 console.log(result);
-                res.render('pages/index.ejs');
+                req.session['success'] = 'true';
+                res.redirect('/');
+                // res.render('pages/index.ejs');
             }
             // console.log('end');
         });
