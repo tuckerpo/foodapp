@@ -1,6 +1,7 @@
 'use strict';
 
 var express = require('express');
+var request = require('request');
 var mysql = require('mysql');
 var yelp = require('yelp-fusion');
 var cache = require('memory-cache');
@@ -216,7 +217,7 @@ app.post('/attendEvent', requireLogin, (req, res) => {
         if (error) console.log(error);
         if(results.length == 0) {
             // Insert into db
-            query = "INSERT INTO eventAttend (user_id, event_id) " +
+            query = "INSERT IGNORE INTO eventAttend (user_id, event_id) " +
                 "VALUES (?, ?)";
         } else {
             // Remove from db
@@ -237,12 +238,36 @@ app.get('/login', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-    res.render('pages/register.ejs');
+    res.render('pages/register.ejs', {duperr: 'false'});
 });
 
 app.get('/about', (req, res) => {
     res.render('pages/about.ejs');
 });
+
+app.get('/zipcode', (req, res) => { 
+    var url = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+
+                req.query.lat+","+req.query.long+
+                "&key="+process.env.GEOCODING_API_KEY;
+    request(url, function(error, response, body) {
+        if(error) console.log(error);
+        
+        var json = JSON.parse(body);
+        var addr_comp = json['results'][0]['address_components'];
+        var zipcode;
+        for(var i = 0; i < addr_comp.length; i++) {
+            if(addr_comp[i]['types'][0] == 'postal_code') {
+                zipcode = addr_comp[i]['short_name'];
+            }
+        }
+        if(zipcode) {
+            res.send(zipcode);
+        }
+    });
+    // don't res send twice, especially not asynchronously 
+   // res.send();
+});
+
 // get registration input
 app.post('/register', (req, res) => {
 
@@ -259,27 +284,34 @@ app.post('/register', (req, res) => {
     req.checkBody('email', 'Valid email required').isEmail();
     req.checkBody('pw', 'Password is required').notEmpty();
     req.checkBody('pw2', 'Passwords don\'t match!').equals(req.body.pw);
-    var err = req.validationErrors()
-    if (err) {
+    var error = req.validationErrors()
+    if (error) {
         console.log('input errors');
-        res.render('pages/register.ejs');
+        res.render('pages/register.ejs', {duperr: 'false'});
     } else {
         console.log('no errors');
-       // res.redirect('/');
-        req.session.user = username;
-        res.redirect('/');
         // if there were no input errors, register them in the DB
         // or check if they already are
         // if succesfully registered, send splash success page, route back to home
         // if already in, route back to homepage
-        
-        connection.query("INSERT IGNORE INTO foodapp.account (accountName, email, password) VALUES (?,?,?)", [username, email, hash]), function (err, result, fields) {
-            if (err) { console.log(err.stack); }
-            else {
-                // console.log(result);
-                
+        var q = connection.query("INSERT INTO foodapp.account (accountName, email, password) VALUES (?,?,?)", 
+                        [username, email, hash], function (err, result, fields) {
+            if (err) { 
+                console.log(err.code);
+                res.render('pages/register.ejs', {duperr: 'true'});
             }
-        }
+            else {
+                console.log(result);
+                req.session.user = username;
+                res.redirect('/');
+            }
+            // console.log('end');
+        });
+        q.on('error', function() {
+            console.log('Duplicate account attempted registration');
+            // res.send('dup');
+            // res.redirect('/');
+        });
     }
 
 });
