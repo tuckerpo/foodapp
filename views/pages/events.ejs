@@ -35,7 +35,7 @@
             <i class='add icon'></i>
             Add Event
         </button>
-        <a href=<%= result.url %> >Yelp</a>
+        <a target="_blank" href=<%= result.url %> >Yelp</a>
 
         <form class='ui form' action='/addEvent' method='post' id=calendarForm>
             <input type="hidden" name="location" value=<%= location %> />
