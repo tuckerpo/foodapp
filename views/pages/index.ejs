@@ -13,20 +13,42 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
 
+    <style>
+        .centered {
+            top:0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 400px;
+            margin-top: 50px;
+        }
+
+        .wrapper {
+            background-color: rgba(3,54,73);
+            color:white;
+            padding: 50px;
+            margin-top: 225px;
+            flex-grow: 1;
+        }
+        .col {
+        }
+    </style>
+
 </head>
+
 
 <body>
 <header>
     <% include ../partials/headerBar.ejs %>
 </header>
     <br><br>
-    <div class='ui center aligned grid'>
-        <div class='column four wide'>
+    <div>
+        <div class='centered'>
             <form class='ui form' action='/results' method='get'>
                 <h2 class='ui dividing header'>Whatchu want?</h2>
                 <div class='field'>
                     <label>Zip Code
-                        (Allow autolocation for quicker searches!)
                     </label>
                     <input id='zip_code' type='text' pattern='[0-9]{5}' placeholder='12345' name='zip_code'>
                 </div>
@@ -51,37 +73,31 @@
                             </div>
                         </div>
                     </div> -->
-                    <button class='ui button' type='submit'>Submit</button>
+                    <button class='ui red button' type='submit'>Submit</button>
             </form>
-            <div class="ui accordion">
-                <div class="active title">
-                    <i class="dropdown icon"></i>
-                    What is "I'm Hungry"?
-                </div>
-                <div class="active content">
+        </div>
+
+        <div class=wrapper>
+        <div class="ui three column padded grid">
+            <div class="column col">
+                    <h4>What is "I'm Hungry"?</h4>
                     <p>"I'm Hungry" gives you suggestions on where to eat based on your input.
                         Let us know what you're in the mood for, we'll do the rest.
                     </p>
-                </div>
-                <div class="title">
-                    <i class="dropdown icon"></i>
-                    How Does It Work?
-                </div>
-                <div class="content">
+            </div>
+            <div class="column">
+                    <h4>How Does It Work?</h4>
                     <p>We take your input and bounce it off a few different search engines, returning just want you
                         want to see, saving you the trouble of having to sift through search results yourself.
                     </p>
-                </div>
-                <div class="title">
-                    <i class="dropdown icon"></i>
-                    Found A Bug?
-                </div>
-                <div class="content">
-                    <p>Please report any and all bugs on our main git repository by <a href="https://github.com/TheNergaL/foodapp/issues/new">clicking here.</a></p>
-                </div>
             </div>
+            <div class="column">
+                    <h4>Found A Bug?</h4>
+                    <p>Please report any and all bugs on our main git repository by <a href="https://github.com/TheNergaL/foodapp/issues/new">clicking here.</a></p>
             </div>
         </div>
+        </div>
+
 
 
 </body>
