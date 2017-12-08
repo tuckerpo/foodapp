@@ -16,7 +16,6 @@
             -moz-background-size: cover;
             -o-background-size: cover;
             background-size: cover;
-            overflow: hidden;
         } 
         .centered {
             top:0;
@@ -39,7 +38,8 @@
 </head>
 
 <body>
-    <div class=logo>ih</div>
+    <span class=logo>ih</span>
+    <a href="/about" style="color:white;">about</a>
     <div class=centered>
         <div class='ui huge header' style="color:white;">im hungry</div>
         <form class="ui form" method="POST">
@@ -52,13 +52,10 @@
                 <input type="password" name="password" placeholder="Password">
             </div>
 
-            <div class="field">
-            </div>
-            <button class="ui button" type="submit">Login</button>
-            <button class="ui button" type="submit"><a href="/register" style="color:rgb(100,100,100)">Register</a></button>
+            <button class="ui red button" type="submit">Login</button>
+            <a href="/register" style="color:white;float:right;">Register</a>
         </form>
         <br>
-        <a href="/about" style="color:white">About</a>
     </div>
 </body>
 </html>

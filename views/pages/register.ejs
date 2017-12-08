@@ -6,19 +6,45 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.13/semantic.min.js"></script>
+    <style>
+        body {
+            background: url(bg.jpg) no-repeat center center fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        } 
+        .centered {
+            top:0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 800px;
+            margin-top: 50px;
+            background-color: rgba(3,101,100,0.8);
+            padding: 100px 100px 100px 100px;
+            margin-bottom: 100px;
+        }
+        .logo {
+            padding-left: 20px;
+            padding-top: 10px;
+            font-size: 60px;
+            color: white;
+        }
+
+        .bgcolor {
+            background-color: rgba(3,101,100,0.8);
+        }
+    </style>
 </head>
 <body>
-<div class="ui menu">
-    <div class="item">
-        <div class="ui button">Home</div>
-    </div>
-    <div class="item">
-        <div class="ui button">
-            <a href="/login">Log-in</a></div>
-        </div>
-    </div>
-</div>
 
+<span class=logo>ih</span>
+<a href="/about" style="color:white;">about</a>
+
+<div class=centered>
+    <div class='ui huge header' style="color:white;">Register</div>
   <% if(duperr == 'true') { %>
     <div class="error_msg ui warning message">
       <div class="header">
@@ -27,37 +53,39 @@
     </div>
   <% } %>
 
-  <form class="ui form segment success" method="POST">
+  <form class="ui form success" method="POST">
     <div class="field">
-      <label>Username</label>
+      <label style="color:white;">Username</label>
       <input type="text" name="username" placeholder="Username">
     </div>
     <div class="field">
-      <label>Email</label>
+      <label style="color:white;">Email</label>
       <input type="text" name="email" placeholder="Valid Email (e.g. email@yahoo.com)">
     </div>
     <div class="field">
-      <label>Password</label>
+      <label style="color:white;">Password</label>
       <input type="password" name="pw" placeholder="Password">
     </div>
     <div class="field">
-      <label>Password Confirmation</label>
+      <label style="color:white;">Password Confirmation</label>
       <input type="password" name="pw2" placeholder="Confirm Password (Passwords must match)">
     </div>
     <div class="inline field">
       <div class="ui checkbox">
         <input type="checkbox" name="terms">
-        <label>I agree to the Terms and Conditions</label>
+        <label style="color:white;">I agree to the Terms and Conditions</label>
       </div>
     </div>
-    <div class="ui primary submit button">Submit</button></div>
+    <div class="ui submit red button">Submit</button></div>
 	<div class="ui clear button">Clear</div>
 	<div class="field">
-	<label>Already have an account?</label>
-	<a href='/login'>Log In</a>
+    <br>
+	<label style="color:white;">Already have an account?</label>
+	<a href='/login'>Login</a>
 	</div>
 	<div class="ui error message"></div>
   </form>
+</div>
 	<script>
 	$('.ui.form')
   .form({
