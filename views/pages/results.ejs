@@ -16,28 +16,50 @@
 
     </script>
 
+    <style>
+        .centered {
+            top:0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 600px;
+            margin-top: 10px;
+        }
+    </style>
+
+
 </head>
 <header>
     <% include ../partials/headerBar.ejs %>
 </header>
 <body>
+    <div class=centered>
     <%if (resultList.length == 0) { %>
         <div class='ui large header'>
             No results.
         </div>
     <% } else {%>
+        <br>
+        <div class='ui horizontal divider header'>
+            Results
+        </div>
+        <div class="ui special cards">
         <% resultList.forEach( item => { %>
             <%- include('../partials/resultItem', {
                 item: item
             }); %>
-            <br>
         <% }) %>
+        </div>
    <% } %>
+   </div>
 </body>
 </html>
 
 <script type='text/javascript'>
 $(document).ready(function() {
-
+    $('.special.cards .image').dimmer({
+      on: 'hover'
+    });
 });
 </script>

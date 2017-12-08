@@ -1,10 +1,21 @@
 <!-- views/partials/resultItem.ejs -->
-<div class=resultItem data-id=<%= item.id %> data-name=<%= item.name %> >
-	<div class="ui center aligned segment">
-        <%= item.name %><br>
-        <img class="ui centered small rounded image" src=<%= item.image_url %>><br>
-        Rating: <%= item.rating %>
-        Price: <%= item.price %><br>
-        <a href='/events/<%= item.id %>' >View Events</a>
+<div class="card" data-id=<%= item.id %> data-name=<%= item.name %> >
+	<div class="blurring dimmable image">
+		<div class="ui dimmer">
+			<div class="content">
+				<div class="center">
+					<div class="ui inverted button">
+						<a href='/events/<%= item.id %>' >View Events</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	    <img src=<%= item.image_url %> style="width:290px;height:238px;"><br>
 	</div>
+	<div class="content">
+	    <div class="header"><%= item.name %><br></div>
+	    <div class="description">Rating: <%= item.rating %> Price: <%= item.price %></div>
+	</div>
+    
+    
 </div>
