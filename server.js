@@ -41,7 +41,6 @@ var connection = mysql.createConnection({
     host: process.env.RDS_HOSTNAME,
     user: process.env.RDS_USERNAME,
     password: process.env.RDS_PASSWORD,
-    port: process.env.RDS_PORT,
     database: process.env.RDS_DATABASE
 });
 
@@ -297,7 +296,7 @@ app.post('/register', (req, res) => {
         var q = connection.query("INSERT INTO foodapp.account (accountName, email, password) VALUES (?,?,?)", 
                         [username, email, hash], function (err, result, fields) {
             if (err) { 
-                console.log(err.code);
+                console.log("Database query failed: " + err.code);
                 res.render('pages/register.ejs', {duperr: 'true'});
             }
             else {
@@ -327,7 +326,7 @@ app.post('/login', (req, res) => {
     } else {
     connection.query("SELECT accountName, password FROM `foodapp`.`account` WHERE accountName= ?", [loadUser], function (err, result, fields) {
         if (!!err) {
-            console.log(err.stack);
+            console.log("DB query err: " + err.stack);
         }
         else {
             // successful query
