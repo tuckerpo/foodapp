@@ -57,7 +57,7 @@ connection.connect(function (err) {
 const yelp_api_key = process.env.FOODAPP_YELP_API_KEY;
 const client = yelp.client(yelp_api_key);
 
-// middleware function for session checks
+// -----------Middleware
 function requireLogin(req, res, next) {
     if (!req.user) {
         res.redirect('/login');
@@ -66,9 +66,6 @@ function requireLogin(req, res, next) {
     }
 };
 
-
-
-// more sessions middleware
 app.use(function (req, res, next) {
     if (req.session && req.session.user) {
         connection.query("SELECT id, accountName FROM `foodapp`.`account` WHERE accountName= ?", [req.session.user], function (err, result, fields) {
@@ -88,9 +85,7 @@ app.use(function (req, res, next) {
 });
 
 //-----------Routes
-//Search Page
 app.get('/', requireLogin, (req, res) => {
-
     res.render('pages/index.ejs', {
         username: req.session.user
     });
@@ -100,7 +95,7 @@ app.get('/logout', requireLogin, (req, res) => {
     req.session.destroy();
     res.render('pages/logout.ejs');
 })
-// Results Page
+
 app.get('/results', requireLogin, (req, res) => {
     var zip_code = req.query.zip_code;
     var keyword = req.query.keyword;
@@ -126,8 +121,6 @@ app.get('/results', requireLogin, (req, res) => {
     }
 });
 
-// Individual Restaurants Page
-// Lists all events at restaurant
 app.get('/events/:id', requireLogin, (req, res) => {
     var eventList;
     var attendees = [];
@@ -198,7 +191,6 @@ app.post('/addEvent', requireLogin, (req, res) => {
         var prevURL = req.header('Referer') || '/';
         res.redirect(prevURL);
     });
-
 });
 
 app.post('/attendEvent', requireLogin, (req, res) => {
@@ -222,9 +214,7 @@ app.post('/attendEvent', requireLogin, (req, res) => {
             res.send(req.body);
         });
     });
-
-
-})/
+});
 
 app.get('/login', (req, res) => {
     res.render('pages/login.ejs');
@@ -257,36 +247,26 @@ app.get('/zipcode', (req, res) => {
             res.send(zipcode);
         }
     });
-    // don't res send twice, especially not asynchronously 
-   // res.send();
 });
 
-// get registration input
 app.post('/register', (req, res) => {
-
-    var username = req.body.username;
-    var password = req.body.pw;
-    var email = req.body.email;
-    var pw2 = req.body.pw2;
+    const username = req.body.username;
+    const password = req.body.pw;
+    const email = req.body.email;
+    const pw2 = req.body.pw2;
     var salt = bcrypt.genSaltSync(10);
     var hash = bcrypt.hashSync(req.body.pw, salt);
-    console.log('hashed and salted ' + hash);
 
-    // make sure fields aren't filled with bullshit
+    // Validate fields
     req.checkBody('username', 'Username is required').notEmpty();
     req.checkBody('email', 'Valid email required').isEmail();
     req.checkBody('pw', 'Password is required').notEmpty();
     req.checkBody('pw2', 'Passwords don\'t match!').equals(req.body.pw);
     var error = req.validationErrors()
     if (error) {
-        console.log('input errors');
+        console.log('Register form input: ' + error);
         res.render('pages/register.ejs', {duperr: 'false'});
     } else {
-        console.log('no errors');
-        // if there were no input errors, register them in the DB
-        // or check if they already are
-        // if succesfully registered, send splash success page, route back to home
-        // if already in, route back to homepage
         var q = connection.query("INSERT INTO foodapp.account (accountName, email, password) VALUES (?,?,?)", 
                         [username, email, hash], function (err, result, fields) {
             if (err) { 
@@ -294,19 +274,14 @@ app.post('/register', (req, res) => {
                 res.render('pages/register.ejs', {duperr: 'true'});
             }
             else {
-                console.log(result);
                 req.session.user = username;
                 res.redirect('/');
             }
-            // console.log('end');
         });
         q.on('error', function() {
             console.log('Duplicate account attempted registration');
-            // res.send('dup');
-            // res.redirect('/');
         });
     }
-
 });
 
 app.post('/login', (req, res) => {
@@ -323,17 +298,14 @@ app.post('/login', (req, res) => {
             console.log("DB query err: " + err.stack);
         }
         else {
-            // successful query
             holder = result;
             if(!holder[0]) {
                 res.render('pages/login.ejs');
             }
             else if (bcrypt.compareSync(loadPw, holder[0].password)) {
-                //if pw is correct
                 req.session.user = loadUser;
                 res.redirect('/');
             } else {
-                //wrong pw
                 res.render('pages/login.ejs');
             }
 
