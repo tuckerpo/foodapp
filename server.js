@@ -1,17 +1,17 @@
 'use strict';
 
-var express = require('express');
-var request = require('request');
-var mysql = require('mysql');
-var yelp = require('yelp-fusion');
-var cache = require('memory-cache');
-var expressValidator = require('express-validator');
-var bodyParser = require('body-parser')
-var bcrypt = require('bcryptjs');
-var session = require('express-session')
-var moment = require('moment');
+const express = require('express');
+const request = require('request');
+const mysql = require('mysql');
+const yelp = require('yelp-fusion');
+const cache = require('memory-cache');
+const expressValidator = require('express-validator');
+const bodyParser = require('body-parser')
+const bcrypt = require('bcryptjs');
+const session = require('express-session')
+const moment = require('moment');
 require('dotenv').config();
-var app = express();
+const app = express();
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(expressValidator());
@@ -53,17 +53,9 @@ connection.connect(function (err) {
 });
 
 // -----------Yelp-Fusion API Setup
-var client;
-var token = cache.get('token') || yelp.accessToken(process.env.YELPID, process.env.YELPSECRET)
-    .then(res => {
-        cache.put('token', res.jsonBody.access_token);
-    }).catch(e => {
-        console.log(e);
-    }).then(res => {
-        client = yelp.client(cache.get('token'));
-    }).catch(e => {
-        console.log(e);
-    })
+// TJP -- Yelp API 3.0 switched from OAuth2 to just API keys, ID & Secret are deprecated
+const yelp_api_key = process.env.FOODAPP_YELP_API_KEY;
+const client = yelp.client(yelp_api_key);
 
 // middleware function for session checks
 function requireLogin(req, res, next) {
@@ -125,6 +117,7 @@ app.get('/results', requireLogin, (req, res) => {
                 resultList: response.jsonBody.businesses
             });
         }).catch(e => {
+            throw new Error(err);
             console.log(e);
         })
     }
@@ -182,6 +175,7 @@ app.get('/events/:id', requireLogin, (req, res) => {
                     username: req.session.user
                 });
             }).catch(e => {
+		throw new Error(err);
                 console.log(e);
             });
         });
